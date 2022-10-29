@@ -1,6 +1,7 @@
 use card_reverse_game::game::{Card, CardType, Game};
 use card_reverse_game::render::{Grid, self};
-use std::io::stdin;
+use card_reverse_game::input;
+use std::io::{stdin, Cursor};
 use std::thread::{sleep, spawn};
 use std::time::{Duration, SystemTime};
 
@@ -39,6 +40,7 @@ fn main() {
         turn: 0, // ターン数
     };
     let grid = Grid::new((3, 3), 3, 3, 3, 2);
+	let mut cursor = input::Cursor::new();
 	spawn(|| {
 		let input = stdin();
 		let mut buf = String::new();
@@ -48,6 +50,18 @@ fn main() {
 				"q\n" => {
 					println!("exit");
 				}
+				// "left\n" => {
+				// 	cursor.move_left();
+				// }
+				// "right\n" => {
+				// 	cursor.move_right(&grid);
+				// }
+				// "up\n" => {
+				// 	cursor.move_up();
+				// }
+				// "down\n" => {
+				// 	cursor.move_down(&grid);
+				// }
 				_ => {
 					println!("input error");
 				}

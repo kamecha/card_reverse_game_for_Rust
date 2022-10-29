@@ -2,11 +2,11 @@ pub mod render {
     use crate::game::{Game, Card, CardType};
 	#[allow(dead_code)]
     pub struct Grid {
-        base: (i32, i32),
-        height: i32,
-        width: i32,
-        card_size: i32,
-        padding: i32,
+        pub base: (i32, i32),
+        pub height: i32,
+        pub width: i32,
+        pub card_size: i32,
+        pub padding: i32,
     }
     pub struct Point {
         pub x_index: i32,
@@ -71,7 +71,7 @@ pub mod render {
 		}
 	}
 	pub fn cursor_render(grid: &Grid, point: &Point) {
-		let (x, y) = grid.get_card_pos(point.x_index, point.y_index);
+		let (mut x, mut y) = grid.get_card_pos(point.x_index, point.y_index);
 		x = if x > grid.width { grid.width } else { x };
 		x = if x < 0 { 0 } else { x };
 		y = if y > grid.height { grid.height } else { y };
@@ -111,9 +111,9 @@ pub mod input {
 				y_index: 0,
 			}
 		}
-		pub fn move_right(&mut self) {
+		pub fn move_right(&mut self, grid: &Grid) {
 			self.x_index += 1;
-			self.x_index = if self.x_index > Grid.width { Grid.width } else { self.x_index };
+			self.x_index = if self.x_index > grid.width { grid.width } else { self.x_index };
 		}
 		pub fn move_left(&mut self) {
 			self.x_index -= 1;
@@ -123,9 +123,9 @@ pub mod input {
 			self.y_index -= 1;
 			self.y_index = if self.y_index < 0 { 0 } else { self.y_index };
 		}
-		pub fn move_down(&mut self) {
+		pub fn move_down(&mut self, grid: &Grid) {
 			self.y_index += 1;
-			self.y_index = if self.y_index > Grid.height { Grid.height } else { self.y_index };
+			self.y_index = if self.y_index > grid.height { grid.height } else { self.y_index };
 		}
 	}
 }
