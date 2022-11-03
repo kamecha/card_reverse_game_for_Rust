@@ -1,4 +1,5 @@
 mod input;
+mod test;
 mod view;
 use crossterm::{
     cursor::{MoveTo, Show},
