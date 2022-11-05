@@ -7,7 +7,7 @@ use crossterm::{
 pub fn input(
     event: Event,
     cursor: &mut (u16, u16),
-    _cards: &mut Vec<Vec<Card>>,
+    model: &mut model::Model,
     width: u16,
     height: u16,
     end: &mut bool,
@@ -47,6 +47,13 @@ pub fn input(
             if cursor.0 < height - 1 {
                 cursor.0 += 1;
             }
+        }
+        Event::Key(KeyEvent {
+            code: KeyCode::Enter,
+            ..
+        }) => {
+            let index = cursor.0 * width + cursor.1;
+            model.reverse_card(index as usize);
         }
         _ => {}
     }
