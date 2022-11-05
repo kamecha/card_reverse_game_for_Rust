@@ -1,6 +1,6 @@
 use super::*;
 use crossterm::{
-    event::{Event, KeyCode, KeyEvent},
+    event::{Event, KeyCode, KeyEvent, KeyModifiers},
     Result,
 };
 
@@ -14,7 +14,8 @@ pub fn input(
 ) -> Result<()> {
     match event {
         Event::Key(KeyEvent {
-            code: KeyCode::Esc, ..
+            code: KeyCode::Char('c'),
+            modifiers: KeyModifiers::CONTROL,
         }) => *end = true,
         Event::Key(KeyEvent {
             code: KeyCode::Left,
