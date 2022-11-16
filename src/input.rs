@@ -7,7 +7,7 @@ use crossterm::{
 pub fn input(
     event: Event,
     cursor: &mut (u16, u16),
-    model: &mut model::Model,
+    gameStract: &mut gameStract::GameStract,
     width: u16,
     height: u16,
     end: &mut bool,
@@ -53,7 +53,7 @@ pub fn input(
             ..
         }) => {
             let index = cursor.0 * width + cursor.1;
-            model.reverse_card(index as usize);
+            gameStract.model.reverse_card(index as usize);
         }
         _ => {}
     }

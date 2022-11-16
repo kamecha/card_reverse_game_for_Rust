@@ -1,3 +1,4 @@
+mod gameStract;
 mod input;
 mod model;
 mod test;
@@ -17,14 +18,21 @@ fn main() -> Result<()> {
 
     const HEIGHT: u16 = 2;
     const WIDTH: u16 = 4;
-    let mut model = model::Model::new();
+    let mut gameStract = gameStract::GameStract::new();
     let mut cursor = (0, 0);
     let mut end = false;
     while !end {
         // view
-        view::view(&mut std::io::stdout(), &model, WIDTH, HEIGHT, &cursor)?;
+        view::view(&mut std::io::stdout(), &gameStract, WIDTH, HEIGHT, &cursor)?;
         // input
-        input::input(read()?, &mut cursor, &mut model, WIDTH, HEIGHT, &mut end)?;
+        input::input(
+            read()?,
+            &mut cursor,
+            &mut gameStract,
+            WIDTH,
+            HEIGHT,
+            &mut end,
+        )?;
     }
 
     execute!(std::io::stdout(), Show, LeaveAlternateScreen)?;

@@ -3,7 +3,7 @@ use crossterm::Result;
 
 pub fn view<T: std::io::Write>(
     output: &mut T,
-    model: &model::Model,
+    game: &gameStract::GameStract,
     width: u16,
     height: u16,
     cursor: &(u16, u16),
@@ -19,7 +19,7 @@ pub fn view<T: std::io::Write>(
         for j in 0..width {
             let hoge = "o";
             let mut mark = String::new();
-            let card = model.get_card((i * width + j) as usize);
+            let card = game.model.get_card((i * width + j) as usize);
             if card.is_reverse {
                 mark.push(' ');
             } else {
