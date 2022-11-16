@@ -17,7 +17,6 @@ pub fn view<T: std::io::Write>(
     )?;
     for i in 0..height {
         for j in 0..width {
-            let hoge = "o";
             let mut mark = String::new();
             let card = game.model.get_card((i * width + j) as usize);
             if card.is_reverse {
