@@ -53,7 +53,7 @@ pub fn input(
             ..
         }) => {
             let index = cursor.0 * width + cursor.1;
-            gameStract.model.reverse_card(index as usize);
+            gameStract.reverse_card(index as usize);
         }
         _ => {}
     }
