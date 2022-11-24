@@ -1,74 +1,41 @@
-use card_reverse_game::game::{Card, CardType, Game};
-use card_reverse_game::render::{Grid, self};
-use card_reverse_game::input;
-use std::io::{stdin, Cursor};
-use std::thread::{sleep, spawn};
-use std::time::{Duration, SystemTime};
+mod gameStract;
+mod input;
+mod model;
+mod test;
+mod view;
+use crossterm::{
+    cursor::{MoveTo, Show},
+    event::read,
+    execute,
+    style::Print,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    Result,
+};
 
-fn game_loop(game: &Game, render: &Grid) {
-    let mut time = SystemTime::now();
-	let delta_taime = Duration::from_secs_f64(1.0 / 60.0);
-	let point = render::Point {
-		x_index: 0,
-		y_index: 0,
-	};
-    loop {
-		render::render(game, render);
-		// render::cursor_render_not(render, &point);
-		render::cursor_render(render, &point);
-        time += delta_taime;
-        if let Ok(dur) = time.duration_since(SystemTime::now()) {
-            sleep(dur);
-		}
+fn main() -> Result<()> {
+    enable_raw_mode()?;
+    execute!(std::io::stdout(), Show, EnterAlternateScreen)?;
+
+    const HEIGHT: u16 = 2;
+    const WIDTH: u16 = 4;
+    let mut gameStract = gameStract::GameStract::new();
+    let mut cursor = (0, 0);
+    let mut end = false;
+    while !end {
+        // view
+        view::view(&mut std::io::stdout(), &gameStract, WIDTH, HEIGHT, &cursor)?;
+        // input
+        input::input(
+            read()?,
+            &mut cursor,
+            &mut gameStract,
+            WIDTH,
+            HEIGHT,
+            &mut end,
+        )?;
     }
-}
 
-fn main() {
-    // 画面の初期化
-    println!("\x1B[2J");
-    let game = Game {
-        deck: vec![
-			Card {
-				card_type: CardType::Circle,
-				is_reverse: false,
-			},
-			Card {
-				card_type: CardType::Triangle,
-				is_reverse: false,
-			},
-		], // 山札
-        turn: 0, // ターン数
-    };
-    let grid = Grid::new((3, 3), 3, 3, 3, 2);
-	let mut cursor = input::Cursor::new();
-	spawn(|| {
-		let input = stdin();
-		let mut buf = String::new();
-		loop {
-			input.read_line(&mut buf).unwrap();
-			match &buf[..] {
-				"q\n" => {
-					println!("exit");
-				}
-				// "left\n" => {
-				// 	cursor.move_left();
-				// }
-				// "right\n" => {
-				// 	cursor.move_right(&grid);
-				// }
-				// "up\n" => {
-				// 	cursor.move_up();
-				// }
-				// "down\n" => {
-				// 	cursor.move_down(&grid);
-				// }
-				_ => {
-					println!("input error");
-				}
-			}
-			println!("{}", &buf);
-			buf.clear();
-		}
-	});
-    game_loop(&game, &grid);
+    execute!(std::io::stdout(), Show, LeaveAlternateScreen)?;
+    disable_raw_mode()?;
+    Ok(())
 }
